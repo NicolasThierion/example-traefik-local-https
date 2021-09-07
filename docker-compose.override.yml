@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  traefik:
+    ports:
+      - "18080:8080"
+      - "3000:3000"
+    volumes:
+      - ./traefik/certs:/etc/certs:ro
+      - ./traefik/dev/dynamic_conf:/etc/traefik/dynamic_conf:ro
+
+    command:
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.api.address=:3000
+      # redirect http => https
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+
+      - --providers.file.directory=/etc/traefik/dynamic_conf
+      - --api.insecure=true
+  server:
+    ports:
+      - "3003:3000"

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  keycloak:
+    ports:
+      - '58080:8080'
+
+  traefik-forward-auth:
+    extra_hosts:
+      - '${KEYCLOAK_HOST}:host-gateway' ## replace localhost address by docker host.

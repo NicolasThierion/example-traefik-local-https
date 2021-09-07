@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  traefik-forward-auth:
+    # network_mode: host
+    environment:
+      - "SSL_CERT_FILE=/config/ca.pem"
+      - "KEYCLOAK_HOST=${KEYCLOAK_HOST}"
+    volumes:
+      - "./certs/${KEYCLOAK_HOST}-cert.pem:/config/ca.pem:ro"
+volumes:
+  keycloak-db:
+
+networks:
+  keycloak-internal:
